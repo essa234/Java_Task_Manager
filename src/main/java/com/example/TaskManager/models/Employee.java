@@ -20,9 +20,9 @@ public class Employee extends User{
 
   private Role role = Role.EMPLOYEE;
 
-  @OneToOne
-  @JoinColumn(name = "managerId")
-  private Manager manager;
+//  @OneToOne
+//  @JoinColumn(name = "managerId")
+//  private Manager manager;
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

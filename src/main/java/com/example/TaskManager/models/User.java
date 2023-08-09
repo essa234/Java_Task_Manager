@@ -2,9 +2,12 @@ package com.example.TaskManager.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.Collection;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,13 +24,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Long userId;
 
   private String email;
   private String password;
   private String firstname;
   private String lastname;
+  private Role role;
+
+  @OneToMany(mappedBy = "user")
+  private Set<Task> tasks;
+
+  public enum Role {
+    EMPLOYEE,
+    MANAGER,
+    ADMIN
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -27,11 +27,18 @@ public class AuthenticationService {
         .lastname(request.getLastname())
         .email(request.getEmail())
         .password(passwordEncoder.encode(request.getPassword()))
+        .role(User.Role.EMPLOYEE)
         .build();
-    repository.save(user);
-    var jwtToken = jwtService.generateToken(user);
+    if(!repository.findByEmail(request.getEmail()).isPresent()) {
+      repository.save(user);
+
+      var jwtToken = jwtService.generateToken(user);
+      return AuthenticationResponse.builder()
+          .token(jwtToken)
+          .build();
+    }
     return AuthenticationResponse.builder()
-        .token(jwtToken)
+        .token("Email already exists, please try again")
         .build();
   }
 //  public AuthenticationResponse registerManager(RegisterRequest request){
@@ -75,5 +82,10 @@ public class AuthenticationService {
      return AuthenticationResponse.builder()
          .token(jwtToken)
          .build();
+  }
+
+  public User test(){
+    var user =  repository.findByEmail("bob@bob.com");
+    return user.isPresent() ? user.get() : null;
   }
 }

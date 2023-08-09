@@ -3,6 +3,8 @@ package com.example.TaskManager.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -24,6 +26,10 @@ public class Task {
   private Long taskId;
   private String title;
   private String description;
-  private Timestamp dueDate;
-  private Instant createdOn;
+  //private Timestamp dueDate;
+  //private Instant createdOn;
+
+  @ManyToOne
+  @JoinColumn(name = "userId", nullable = false)
+  private User user;
 }
