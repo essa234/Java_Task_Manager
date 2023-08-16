@@ -15,12 +15,16 @@ public class UserSeeder {
   @Autowired
   JdbcTemplate jdbcTemplate;
   UserRepository userRepository;
+
+  private List<User> usersList;
+
   @EventListener
   public void seed(ContextRefreshedEvent event) {
     seedUsersTable();
   }
 
   private void seedUsersTable() {
+    clearUserTable();
     String sql = "SELECT username, email FROM users U WHERE U.username = \"admin\" OR U.email = \"test@test.com\" LIMIT 1";
     List<User> u = jdbcTemplate.query(sql, (resultSet, rowNum) -> null);
     if(u == null || u.size() <= 0) {
@@ -35,5 +39,13 @@ public class UserSeeder {
     } else {
       System.out.println("Users Seeding Not Required");
     }
+  }
+
+  private void createUsers(){}
+
+
+  private void clearUserTable(){
+    String sql = "DELETE FROM users";
+    jdbcTemplate.execute(sql);
   }
 }
