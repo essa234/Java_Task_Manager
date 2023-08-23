@@ -6,52 +6,73 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
 @Service
 public class UserService {
 
   @Autowired
-  private UserRepository userRepository;
+  UserRepository userRepository;
   @Autowired
-  private PasswordEncoder passwordEncoder;
+  PasswordEncoder passwordEncoder;
 
 //  public User loadByUsername(String username){
 //    return userRepository.findByUsername(username).iterator().next();
 //  }
 
-  public User updateEmail(Long userId, String newEmail) {
-    User existingUser;
-    try {
-      existingUser = userRepository.findById(userId).get();
-    } catch (Exception e){
-      throw new UsernameNotFoundException("User not found");
-    }
-    existingUser.setEmail(newEmail);
-    User updatedUser = userRepository.save(existingUser);
-    return updatedUser;
+  public User save(User user) { return userRepository.save(user); }
+  public User getUser(Long userId){
+    return userRepository.getReferenceById(userId);
   }
 
-  public User updatePassword(Long userId, String newPassword) {
+  public User deleteUser(Long userId){
     User existingUser;
     try {
       existingUser = userRepository.findById(userId).get();
     } catch (Exception e){
-      throw new UsernameNotFoundException("User not found");
+      throw new UserNotFoundException("User not found", e);
     }
-    existingUser.setPassword(passwordEncoder.encode(newPassword));
-    User updatedUser = userRepository.save(existingUser);
-    return updatedUser;
+    userRepository.delete(existingUser);
+    return existingUser;
   }
 
-  public User updateRole(Long userId, String role){
+  public User updateUser(Long userId, String password, String email, String firstname, String lastname, String role) {
     User existingUser;
     try {
       existingUser = userRepository.findById(userId).get();
     } catch (Exception e){
-      throw new UsernameNotFoundException("User not found");
+      throw new UserNotFoundException("User not found", e);
     }
-    if(role == User.Role.EMPLOYEE.toString()  || role == User.Role.MANAGER.toString()){
-      existingUser.setRole(User.Role.valueOf(role));
+
+    if(!StringUtils.isEmpty(password)){
+      String newPassword = passwordEncoder.encode(password);
+      existingUser.setPassword(newPassword);
+    }
+
+    if(!StringUtils.isEmpty(email)) {
+      existingUser.setEmail(email);
+    }
+
+    if(!StringUtils.isEmpty(firstname)) {
+      existingUser.setFirstname(firstname);
+    }
+
+    if(!StringUtils.isEmpty(lastname)) {
+      existingUser.setLastname(lastname);
+    }
+
+    if(!StringUtils.isEmpty(role)) {
+
+      if(role.equals("EMPLOYEE")){
+        existingUser.setRole(User.Role.EMPLOYEE);
+      }
+
+      if(role.equals("MANAGER")){
+        existingUser.setRole(User.Role.MANAGER);
+      } else {
+        //throw new InvalidAssignmentException("This role does not exist please try again");
+      }
+
     }
     User updatedUser = userRepository.save(existingUser);
     return updatedUser;

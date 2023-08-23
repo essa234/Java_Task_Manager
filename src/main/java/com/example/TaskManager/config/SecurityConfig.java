@@ -29,6 +29,8 @@ public class SecurityConfig {
         .authorizeHttpRequests((req) -> req
             .requestMatchers("/api/v1/auth/**")
             .permitAll()
+
+           // .requestMatchers("/api/v1/user")
             .anyRequest()
             .authenticated())
         .sessionManagement( smc ->

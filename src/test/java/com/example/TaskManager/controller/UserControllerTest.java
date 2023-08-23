@@ -1,24 +1,28 @@
 package com.example.TaskManager.controller;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import com.example.TaskManager.config.UserSeeder;
 import com.example.TaskManager.models.Task;
 import com.example.TaskManager.models.User;
-import com.example.TaskManager.service.TaskService;
+import com.example.TaskManager.service.UserService;
+import jakarta.persistence.Access;
+import java.util.List;
+import java.util.Set;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
 @SpringBootTest
-public class TasksControllerTest {
+public class UserControllerTest {
 
   @Autowired
-  TasksController tasksController;
-  @Autowired
-  TaskService taskService;
+  UserController userController;
 
+  @Autowired
+  UserService userService;
   private UserSeeder userSeeder;
 
   @BeforeEach
@@ -27,7 +31,7 @@ public class TasksControllerTest {
   }
 
   @Test
-  void itShouldGetATaskById(){
+  void itShouldGetAUserById() {
     User user = User.builder()
         .userId(1L)
         .email("")
@@ -44,16 +48,16 @@ public class TasksControllerTest {
         .user(user)
         .build();
 
-    taskService.saveTask(task);
+    user.setTasks(Set.of(task));
 
-    Task task1 = tasksController.getTask(1L).getBody();
+    userService.save(user);
 
-    assertThat(task1.getTaskId()).isEqualTo(1L);
-    //assertThat(task1.getUser()).isEqualTo(user);
+    User foundUser = userController.getUser(1L).getBody();
+    assertThat(foundUser.getUserId()).isEqualTo(1L);
   }
 
   @Test
-  void itShouldSaveATaskById(){
+  void itCanDeleteAUserById() {
     User user = User.builder()
         .userId(1L)
         .email("")
@@ -70,16 +74,16 @@ public class TasksControllerTest {
         .user(user)
         .build();
 
-    tasksController.saveTask(task);
+    user.setTasks(Set.of(task));
 
-    Task task1 = taskService.getTask(1L);
+    userService.save(user);
 
-    assertThat(task1.getTaskId()).isEqualTo(1L);
-    //assertThat(task1.getUser()).isEqualTo(user);
+    User deletedUser = userController.deleteUser(1L).getBody();
+    assertThat(deletedUser.getUserId()).isEqualTo(1L);
   }
 
   @Test
-  void itCanDeleteATask(){
+  void itCanUpdateAUser() {
     User user = User.builder()
         .userId(1L)
         .email("")
@@ -96,37 +100,13 @@ public class TasksControllerTest {
         .user(user)
         .build();
 
-    taskService.saveTask(task);
+    user.setTasks(Set.of(task));
 
-    Task task1 = tasksController.deleteTask(1L).getBody();
+    userService.save(user);
 
-    assertThat(task1.getTaskId()).isEqualTo(1L);
-    //assertThat(task1.getUser()).isEqualTo(user);
+    User updatedUser = userController.updateUserDetails(1L, null, "newemail@test.com", null, null, null).getBody();
+    assertThat(updatedUser.getUserId()).isEqualTo(1L);
+    assertThat(updatedUser.getEmail()).isEqualTo("newemail@test.com");
   }
 
-  @Test
-  void itCanUpdateATask(){
-    User user = User.builder()
-        .userId(1L)
-        .email("")
-        .password("")
-        .firstname("")
-        .lastname("")
-        .role(User.Role.EMPLOYEE)
-        .build();
-
-    Task task = Task.builder()
-        .taskId(1L)
-        .title("test task")
-        .description("this is a test task")
-        .user(user)
-        .build();
-
-    taskService.saveTask(task);
-
-    Task task1 = tasksController.updateTask(1L, null, "updatedTitle", null, null).getBody();
-
-    assertThat(task1.getTaskId()).isEqualTo(1L);
-    assertThat(task1.getTitle()).isEqualTo("updatedTitle");
-  }
 }
