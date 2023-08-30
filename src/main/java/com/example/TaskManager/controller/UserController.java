@@ -23,22 +23,27 @@ public class UserController {
   UserService userService;
 
   @GetMapping()
-  public ResponseEntity<User> getUser(@RequestBody Long userId){
-    return ResponseEntity.ok(userService.getUser(userId));
+  public ResponseEntity<User> getUser(@RequestParam String userEmail,
+                                      @RequestBody AuthenticationRequest request
+  ){
+    return ResponseEntity.ok(userService.getUser(userEmail, request));
   }
 
   @DeleteMapping()
-  public ResponseEntity<User> deleteUser(@RequestBody Long userId){
-    return ResponseEntity.ok(userService.deleteUser(userId));
+  public ResponseEntity<UserResponse> deleteUser(@RequestBody Long userId,
+                                                 @RequestBody AuthenticationRequest request
+  ) {
+    return ResponseEntity.ok(userService.deleteUser(userId, request));
   }
 
   @PatchMapping()
-  public ResponseEntity<User> updateUserDetails(@RequestBody Long userId,
+  public ResponseEntity<UserResponse> updateUserDetails(@RequestParam Long userId,
                                                 @RequestParam(required = false) String password,
                                                 @RequestParam(required = false) String email,
                                                 @RequestParam(required = false) String firstname,
                                                 @RequestParam(required = false) String lastname,
-                                                @RequestParam(required = false) String role){
-    return ResponseEntity.ok(userService.updateUser(userId, password, email, firstname, lastname, role));
+                                                @RequestParam(required = false) String role,
+                                                @RequestBody AuthenticationRequest request){
+    return ResponseEntity.ok(userService.updateUser(userId, password, email, firstname, lastname, role, request));
   }
 }
