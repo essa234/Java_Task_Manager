@@ -28,8 +28,8 @@ public class TaskService {
     //return tasks.isPresent() ? tasks.get() : List.of(); }
     return null; }
 
-  public Collection<Task> getTasksByTitle(String title){
-    return taskRepository.findTasksbyTitle(title);
+  public Optional<Task> getTasksByTitle(String title){
+    return taskRepository.findByTitle(title);
   }
 
   public Task updateTask(Long taskId, User user, String title, String description, Timestamp dueDate){

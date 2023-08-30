@@ -2,6 +2,7 @@ package com.example.TaskManager.service;
 
 import com.example.TaskManager.models.User;
 import com.example.TaskManager.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,10 +10,11 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
   @Autowired
-  UserRepository userRepository;
+  private final UserRepository userRepository;
   @Autowired
   PasswordEncoder passwordEncoder;
 

@@ -1,5 +1,6 @@
 package com.example.TaskManager.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,13 +25,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long userId;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "user_id")
+  public Long userId;
 
+  @Column(name = "email")
   private String email;
+  @Column(name = "password")
   private String password;
+  @Column(name = "firstname")
   private String firstname;
+  @Column(name = "lastname")
   private String lastname;
+  @Column(name = "role")
   private Role role;
 
   @OneToMany(mappedBy = "user")
