@@ -30,7 +30,7 @@ public class SecurityConfig {
             .requestMatchers("/api/v1/auth/**")
             .permitAll()
 
-           // .requestMatchers("/api/v1/user")
+//           .requestMatchers("/api/v1/user")
             .anyRequest()
             .authenticated())
         .sessionManagement( smc ->

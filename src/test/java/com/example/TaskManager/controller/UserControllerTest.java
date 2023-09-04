@@ -38,7 +38,7 @@ public class UserControllerTest {
   void itShouldGetAUserById() {
     User user = User.builder()
         .userId(1L)
-        .email("")
+        .email("email@email.com")
         .password("")
         .firstname("")
         .lastname("")
@@ -49,7 +49,7 @@ public class UserControllerTest {
 
     userService.save(user);
 
-    User foundUser = userController.getUser(1L).getBody();
+    User foundUser = userController.getUser("email@email.com").getBody();
     assertThat(foundUser.getUserId()).isEqualTo(1L);
   }
 

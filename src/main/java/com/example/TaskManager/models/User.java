@@ -25,9 +25,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class User implements UserDetails {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "user_id")
-  public Long userId;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long userId;
 
   @Column(name = "email")
   private String email;

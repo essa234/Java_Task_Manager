@@ -26,26 +26,28 @@ public class TasksController {
   TaskService taskService;
 
   @PostMapping("/save")
-  public ResponseEntity<Task> saveTask(@RequestBody Task task) {
-    return ResponseEntity.ok(taskService.saveTask(task));
+  public ResponseEntity<TaskResponse> saveTask(@RequestBody TaskRequest request) {
+    return ResponseEntity.ok(taskService.saveTask(request));
   }
 
   @GetMapping()
-  public ResponseEntity<Task> getTask(@RequestBody Long taskId) {
+  public ResponseEntity<Task> getTask(@RequestParam Long taskId) {
     return ResponseEntity.ok(taskService.getTask(taskId));
   }
 
-  @PatchMapping("/user")
-  public ResponseEntity<Task> updateTask(@RequestParam Long taskId,
-                                         @RequestParam(required = false) User user,
+  @PatchMapping("/update")
+  public ResponseEntity<TaskResponse> updateTask(@RequestParam Long taskId,
+                                         @RequestParam(required = false) String userEmail,
                                          @RequestParam(required = false) String title,
                                          @RequestParam(required = false) String description,
-                                         @RequestParam(required = false) Timestamp dueDate){
-    return ResponseEntity.ok(taskService.updateTask(taskId,user,title,description,dueDate));
+                                         @RequestParam(required = false) Timestamp dueDate,
+                                         @RequestBody AuthenticationRequest request){
+    return ResponseEntity.ok(taskService.updateTask(taskId,userEmail,title,description,dueDate,request));
   }
   @DeleteMapping()
-  public ResponseEntity<Task> deleteTask(@RequestBody Long taskId){
-    return ResponseEntity.ok(taskService.deleteTask(taskId));
+  public ResponseEntity<TaskResponse> deleteTask(@RequestBody Long taskId,
+                                         @RequestBody AuthenticationRequest request){
+    return ResponseEntity.ok(taskService.deleteTask(taskId, request));
   }
 
 }
