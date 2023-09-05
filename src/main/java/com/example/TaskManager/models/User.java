@@ -37,7 +37,7 @@ public class User implements UserDetails {
   @Column(name = "lastname")
   private String lastname;
   @Column(name = "role")
-  private Role role;
+  private String role;
 
   @OneToMany(mappedBy = "user")
   private Set<Task> tasks;

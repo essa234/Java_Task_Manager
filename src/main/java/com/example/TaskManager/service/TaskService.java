@@ -98,7 +98,7 @@ public class TaskService {
 
   private boolean validateRole(AuthenticationRequest request) {
     if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-      if (userRepository.findByEmail(request.getPassword()).get().getRole() == User.Role.ADMIN){
+      if (userRepository.findByEmail(request.getPassword()).get().getRole().equals(String.valueOf(User.Role.ADMIN))) {
         return true;
       }
     }

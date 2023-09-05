@@ -46,7 +46,7 @@ public class UserSeeder {
     admin.setPassword(passwordEncoder.encode("admin"));
     admin.setFirstname("admin");
     admin.setLastname("");
-    admin.setRole(User.Role.ADMIN);
+    admin.setRole(String.valueOf(User.Role.ADMIN));
     admin.setTasks(Set.of());
 
     User manager = new User();
@@ -55,7 +55,7 @@ public class UserSeeder {
     manager.setPassword(passwordEncoder.encode("manager"));
     manager.setFirstname("manager");
     manager.setLastname("");
-    manager.setRole(User.Role.MANAGER);
+    manager.setRole(String.valueOf(User.Role.MANAGER));
     manager.setTasks(Set.of());
 
     userRepository.save(admin);
@@ -68,7 +68,7 @@ public class UserSeeder {
       user.setPassword(passwordEncoder.encode("password" + i));
       user.setFirstname("FirstName" + i);
       user.setLastname("LastName" + i);
-      user.setRole(User.Role.EMPLOYEE);
+      user.setRole(String.valueOf(User.Role.EMPLOYEE));
       user.setTasks(Set.of());// Adjust role as needed
 
       userRepository.save(user);
