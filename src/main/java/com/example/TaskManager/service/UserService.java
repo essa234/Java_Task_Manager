@@ -75,11 +75,11 @@ public class UserService {
       if (!StringUtils.isEmpty(role)) {
 
         if (role.equals("EMPLOYEE")) {
-          existingUser.setRole(User.Role.EMPLOYEE);
+          existingUser.setRole(String.valueOf(User.Role.EMPLOYEE));
         }
 
         if (role.equals("MANAGER")) {
-          existingUser.setRole(User.Role.MANAGER);
+          existingUser.setRole(String.valueOf(User.Role.MANAGER));
         } else {
           //throw new InvalidAssignmentException("This role does not exist please try again");
         }
@@ -93,7 +93,7 @@ public class UserService {
 
   private boolean validateRole(AuthenticationRequest request) {
     if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-      if (userRepository.findByEmail(request.getPassword()).get().getRole() == User.Role.ADMIN){
+      if (userRepository.findByEmail(request.getEmail()).get().getRole().equals(String.valueOf(User.Role.ADMIN))) {
         return true;
       }
     }

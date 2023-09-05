@@ -30,7 +30,7 @@ public class UserController {
   }
 
   @DeleteMapping()
-  public ResponseEntity<UserResponse> deleteUser(@RequestBody Long userId,
+  public ResponseEntity<UserResponse> deleteUser(@RequestParam Long userId,
                                                  @RequestBody AuthenticationRequest request
   ) {
     return ResponseEntity.ok(userService.deleteUser(userId, request));

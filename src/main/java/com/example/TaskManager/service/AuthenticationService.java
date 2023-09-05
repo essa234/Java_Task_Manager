@@ -29,7 +29,7 @@ public class AuthenticationService {
         .lastname(request.getLastname())
         .email(request.getEmail())
         .password(passwordEncoder.encode(request.getPassword()))
-        .role(User.Role.EMPLOYEE)
+        .role(String.valueOf(User.Role.EMPLOYEE))
         .build();
     if(!repository.findByEmail(request.getEmail()).isPresent()) {
       repository.save(user);

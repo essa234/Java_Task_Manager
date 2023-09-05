@@ -31,63 +31,80 @@ public class UserControllerTest {
 
   @BeforeEach
   void setup(){
-    userSeeder.clearUserTable();
+    userSeeder.seedUsersTable();
   }
 
   @Test
   void itShouldGetAUserById() {
     User user = User.builder()
-        .userId(1L)
         .email("email@email.com")
         .password("")
         .firstname("")
         .lastname("")
-        .role(User.Role.EMPLOYEE)
+        .role(String.valueOf(User.Role.EMPLOYEE))
         .build();
 
     user.setTasks(Set.of());
 
     userService.save(user);
 
-    User foundUser = userController.getUser("email@email.com").getBody();
-    assertThat(foundUser.getUserId()).isEqualTo(1L);
+    User foundUser = userController.getUser("email@email.com",
+        AuthenticationRequest.builder()
+            .email("admin@admin.com")
+            .password("admin")
+            .build()).getBody();
+    assertThat(foundUser.getEmail()).isEqualTo("email@email.com");
   }
 
-//  @Test
-//  void itCanDeleteAUserById() {
-//    User user = User.builder()
-//        .email("")
-//        .password("")
-//        .firstname("")
-//        .lastname("")
-//        .role(User.Role.EMPLOYEE)
-//        .build();
-//
-//    user.setTasks(Set.of());
-//    userService.save(user);
-//
-//    User deletedUser = userController.deleteUser(1L).getBody();
-//    assertThat(deletedUser.getUserId()).isEqualTo(1L);
-//  }
-//
-//  @Test
-//  void itCanUpdateAUser() {
-//    User user = User.builder()
-//        .userId(1L)
-//        .email("")
-//        .password("")
-//        .firstname("")
-//        .lastname("")
-//        .role(User.Role.EMPLOYEE)
-//        .build();
-//
-//    user.setTasks(Set.of());
-//
-//    userService.save(user);
-//
-//    User updatedUser = userController.updateUserDetails(1L, null, "newemail@test.com", null, null, null).getBody();
-//    assertThat(updatedUser.getUserId()).isEqualTo(1L);
-//    assertThat(updatedUser.getEmail()).isEqualTo("newemail@test.com");
-//  }
+  @Test
+  void itCanDeleteAUserById() {
+    User user = User.builder()
+        .userId(1L)
+        .email("email@email.com")
+        .password("")
+        .firstname("")
+        .lastname("")
+        .role(String.valueOf(User.Role.EMPLOYEE))
+        .build();
+
+    user.setTasks(Set.of());
+
+    userService.save(user);
+
+    UserResponse deletedUser = userController.deleteUser(1L, AuthenticationRequest.builder()
+        .email("admin@admin.com")
+        .password("admin")
+        .build()).getBody();
+    assertThat(deletedUser.getMessage()).isEqualTo("User deleted successfully");
+  }
+
+  @Test
+  void itCanUpdateAUser() {
+    User user = User.builder()
+        .userId(1L)
+        .email("")
+        .password("")
+        .firstname("")
+        .lastname("")
+        .role(String.valueOf(User.Role.EMPLOYEE))
+        .build();
+
+    user.setTasks(Set.of());
+
+    userService.save(user);
+
+    UserResponse updatedUser = userController.updateUserDetails(1L,
+        null,
+        "newemail@test.com",
+        null,
+        null,
+        null,
+        AuthenticationRequest.builder()
+            .email("admin@admin.com")
+            .password("admin")
+            .build()).getBody();
+
+    assertThat(updatedUser.getMessage()).isEqualTo("User updated successfully");
+  }
 
 }
